@@ -19,7 +19,7 @@ import os
 
 from django.utils.translation import ugettext_lazy as _t
 
-from desktop.lib.conf import Config, validate_thrift_transport
+from desktop.lib.conf import Config, validate_thrift_transport, coerce_str_lowercase
 
 
 HBASE_CLUSTERS = Config(
@@ -58,6 +58,16 @@ TRANSPORT_MODE = Config(
   default='socket'
 )
 
+# coerce_str_lowercase
+
+#<property>
+#    <name>hbase.thrift.support.proxyuser</name>
+#    <value>true</value>
+#  </property>
+#  <property>
+#    <name>hbase.regionserver.thrift.http</name>
+#    <value>true</value>
+#  </property>
 
 def config_validator(user):
   res = []

@@ -438,7 +438,7 @@ def range_pair(cat, fq_filter, iterable, end, collection_facet):
   # e.g. counts":["0",17430,"1000",1949,"2000",671,"3000",404,"4000",243,"5000",165],"gap":1000,"start":0,"end":6000}
   pairs = []
   selected_values = [f['value'] for f in fq_filter]
-  is_single_unit_gap = re.match('^[\+\-]?1[A-Za-z]*$', str(collection_facet['properties']['gap'])) is not None
+  is_single_unit_gap = re.match('^[\+\-]?1[A-Za-z/]*$', str(collection_facet['properties']['gap'])) is not None
   is_up = collection_facet['properties']['sort'] == 'asc'
 
   if collection_facet['properties']['sort'] == 'asc' and collection_facet['type'] == 'range-up':

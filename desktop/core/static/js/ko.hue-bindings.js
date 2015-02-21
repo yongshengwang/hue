@@ -316,15 +316,17 @@ ko.bindingHandlers.daterangepicker = {
             '</div>' +
             '<div class="facet-field-cnt picker">' +
             '<div class="facet-field-label facet-field-label-fixed-width">' + KO_DATERANGEPICKER_LABELS.INTERVAL + '</div>' +
-            '<div class="input-prepend input-group"><span class="add-on input-group-addon"><i class="fa fa-repeat"></i></span></div>&nbsp;' +
+            '<div class="input-prepend input-group"><span class="add-on input-group-addon"><i class="fa fa-repeat"></i></span>&nbsp;' +
             '<select class="input-small interval-select" style="margin-right: 6px">' +
             renderOptions(_intervalOptions) +
             '</select>' +
             '<input class="input interval hide" type="hidden" value="" />' +
             '</div>' +
+            '</div>' +
             '<div class="facet-field-cnt picker">' +
             '<div class="facet-field-label facet-field-label-fixed-width"></div>' +
             '<div class="facet-field-switch"><a href="javascript:void(0)"><i class="fa fa-calendar-o"></i> ' + KO_DATERANGEPICKER_LABELS.CUSTOM_FORMAT + '</a></div>' +
+            '<div class="facet-field-switch" id="ago-picker" style="padding-left:15px"><a href="javascript:void(0)"><i class="fa fa-clock-o"></i> ' + KO_DATERANGEPICKER_LABELS.N_DAYS_AGO + '</a></div>' +
             '</div>' +
             '<div class="facet-field-cnt custom">' +
             '<div class="facet-field-label facet-field-label-fixed-width">' + KO_DATERANGEPICKER_LABELS.START + '</div>' +
@@ -335,8 +337,8 @@ ko.bindingHandlers.daterangepicker = {
             '<a class="custom-popover" href="javascript:void(0)" data-trigger="focus" data-toggle="popover" data-placement="right" rel="popover" data-html="true"' +
             '       title="' + KO_DATERANGEPICKER_LABELS.CUSTOM_POPOVER_TITLE + '"' +
             '       data-content="' + KO_DATERANGEPICKER_LABELS.CUSTOM_POPOVER_CONTENT + '">' +
-            '&nbsp;&nbsp;<i class="fa fa-question-circle"></i>' +
-            ' </a>' +
+            '&nbsp;&nbsp;<i class="fa fa-question-circle pull-right"></i>' +
+            '</a>' +
             '</div>' +
             '<div class="facet-field-cnt custom">' +
             '<div class="facet-field-label facet-field-label-fixed-width">' + KO_DATERANGEPICKER_LABELS.END + '</div>' +
@@ -457,6 +459,20 @@ ko.bindingHandlers.daterangepicker = {
       _tmpl.find(".facet-field-cnt.custom").hide();
       _tmpl.find(".facet-field-cnt.picker").show();
     });
+
+    _tmpl.find("#ago-picker a").on("click", function () {
+        _tmpl.find(".facet-field-cnt.custom").show();
+        _tmpl.find(".facet-field-cnt.picker").hide();
+
+        _tmpl.find(".start-date-custom").val('NOW-10YEARS/YEAR');
+        _tmpl.find(".start-date-custom").change();
+
+        _tmpl.find(".end-date-custom").val('NOW/YEAR');
+        _tmpl.find(".end-date-custom").change();
+
+        _tmpl.find(".interval-custom").val('+1YEAR');
+        _tmpl.find(".interval-custom").change();
+      });
 
     _tmpl.find(".start-date-custom").on("change", function () {
       _options.min(_tmpl.find(".start-date-custom").val());
@@ -753,12 +769,12 @@ ko.bindingHandlers.chosen = {
     init: function(element, valueAccessor, allBindings, viewModel, bindingContext){
         var $element = $(element);
         var options = ko.unwrap(valueAccessor());
-        
+
         if (typeof options === 'object')
             $element.chosen(options);
         else
             $element.chosen();
-                
+
         ['options', 'selectedOptions', 'value'].forEach(function(propName){
             if (allBindings.has(propName)){
                 var prop = allBindings.get(propName);
@@ -768,7 +784,7 @@ ko.bindingHandlers.chosen = {
                     });
                 }
             }
-        });        
+        });
     }
 }
 

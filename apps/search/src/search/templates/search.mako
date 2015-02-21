@@ -278,7 +278,6 @@ ${ dashboard.layout_skeleton() }
       <!-- /ko -->
       <!-- ko if: properties.isDate() -->
         <div data-bind="daterangepicker: {start: properties.start, end: properties.end, gap: properties.initial_gap, relatedgap: properties.gap, min: properties.min, max: properties.max}"></div>
-        <br/>
       <!-- /ko -->
     <!-- /ko -->
 
@@ -405,13 +404,16 @@ ${ dashboard.layout_skeleton() }
         <div data-bind="foreach: $parent.counts">
           <div class="trigger-exclude">
               <!-- ko if: ! selected -->
-                <a class="pointer" data-bind="text: $data.from + ($data.is_up ? ' & Up' : ' & Less'), click: function(){ $root.query.selectRangeUpFacet({count: $data.value, widget_id: $parent.id(), from: $data.from, to: $data.to, cat: $data.field, is_up: $data.is_up}) }"></a>
+                <a class="pointer" data-bind="text: $parent.properties.end()[0] == 'N' ? 'Last ' + $parent.properties.gap().replace(/\+1/g, $index() + 1) + ' ago' : 
+                  $data.from + ($data.is_up ? ' & Up' : ' & Less'),
+                  click: function(){ $root.query.selectRangeUpFacet({count: $data.value, widget_id: $parent.id(), from: $data.from, to: $data.to, cat: $data.field, is_up: $data.is_up}) }"></a>
                 <span class="pointer counter" data-bind="text: ' (' + $data.total_counts + ')', click: function(){ $root.query.selectRangeUpFacet({count: $data.value, widget_id: $parent.id(), from: $data.from, to: $data.to, cat: $data.field, is_up: $data.is_up}) }"></span>
                 <a class="exclude pointer" data-bind="click: function(){ $root.query.selectRangeUpFacet({count: $data.value, widget_id: $parent.id(), from: $data.from, to: $data.to, cat: $data.field, 'exclude': true, is_up: $data.is_up}) }" title="${ _('Exclude this value') }"><i class="fa fa-minus"></i></a>
               <!-- /ko -->
               <!-- ko if: selected -->
                 <span class="pointer" data-bind="click: function(){ $root.query.selectRangeUpFacet({count: $data.value, widget_id: $parent.id(), from: $data.from, to: $data.to, cat: $data.field, is_up: $data.is_up}) }">
-                  <strong data-bind="text: $data.from + ($data.is_up ? ' & Up' : ' & Less')"></strong>
+                  <strong data-bind="text: $parent.properties.end()[0] == 'N' ? 'Last ' + $parent.properties.gap().replace(/\+1/g, $index() + 1) + ' ago' : 
+                      $data.from + ($data.is_up ? ' & Up' : ' & Less')"></strong>
                   <a class="pointer" data-bind="visible: ! exclude"><i class="fa fa-times"></i></a>
                   <a class="pointer" data-bind="visible: exclude"><i class="fa fa-plus"></i></a>
                 </span>

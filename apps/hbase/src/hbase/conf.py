@@ -52,22 +52,6 @@ HBASE_CONF_DIR = Config(
   default=os.environ.get("HBASE_CONF_DIR", '/etc/hbase/conf')
 )
 
-TRANSPORT_MODE = Config(
-  key="transport_mode",
-  help=_t("Force the underlying mode of the Thrift Transport: socket|http. http is required for using the doAs impersonation."),
-  default='socket'
-)
-
-# coerce_str_lowercase
-
-#<property>
-#    <name>hbase.thrift.support.proxyuser</name>
-#    <value>true</value>
-#  </property>
-#  <property>
-#    <name>hbase.regionserver.thrift.http</name>
-#    <value>true</value>
-#  </property>
 
 def config_validator(user):
   res = []

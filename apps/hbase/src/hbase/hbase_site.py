@@ -34,6 +34,11 @@ SITE_DICT = None
 _CNF_HBASE_THRIFT_KERBEROS_PRINCIPAL = 'hbase.thrift.kerberos.principal'
 _CNF_HBASE_AUTHENTICATION = 'hbase.security.authentication'
 
+_CNF_HBASE_IMPERSONATION_ENABLED = 'hbase.thrift.support.proxyuser'
+_CNF_HBASE_USE_THRIFT_HTTP = 'hbase.regionserver.thrift.http'
+_CNF_HBASE_USE_THRIFT_SSL = 'hbase.thrift.ssl.enabled'
+
+
 
 def reset():
   global SITE_DICT
@@ -55,6 +60,15 @@ def get_server_principal():
 
 def get_server_authentication():
   return get_conf().get(_CNF_HBASE_AUTHENTICATION, 'NOSASL').upper()
+
+def is_impersonation_enabled():
+  return get_conf().get(_CNF_HBASE_IMPERSONATION_ENABLED, 'FALSE').upper() == 'TRUE'
+
+def is_using_thrift_http():
+  return get_conf().get(_CNF_HBASE_USE_THRIFT_HTTP, 'FALSE').upper() == 'TRUE'
+
+def is_using_thrift_ssl():
+  return get_conf().get(_CNF_HBASE_USE_THRIFT_SSL, 'FALSE').upper() == 'TRUE'
 
 
 def _parse_site():

@@ -53,10 +53,8 @@ class WebApp(sessionManager: SessionManager)
     val createSessionRequest = parsedBody.extract[CreateSessionRequest]
 
     val sessionFuture = createSessionRequest.lang match {
-      case "scala" => sessionManager.createSession(createSessionRequest.lang)
-      case "spark" => sessionManager.createSession(createSessionRequest.lang)
-      case "pyspark" => sessionManager.createSession(createSessionRequest.lang)
-      case "python" => sessionManager.createSession(createSessionRequest.lang)
+      case "spark" => sessionManager.createSession(Session.Spark())
+      case "pyspark" => sessionManager.createSession(Session.PySpark())
       case lang => halt(400, "unsupported language: " + lang)
     }
 
@@ -165,6 +163,7 @@ class WebApp(sessionManager: SessionManager)
   private def formatSession(session: Session) = {
     Map(
       "id" -> session.id,
+      "kind" -> session.kind.toString,
       "state" -> session.state.getClass.getSimpleName.toLowerCase
     )
   }

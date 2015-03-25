@@ -39,7 +39,7 @@ class Client(livyConf: LivyConf) extends Logging {
   yarnClient.init(yarnConf)
   yarnClient.start()
 
-  def submitApplication(id: String, lang: String, callbackUrl: String): Future[Job] = {
+  def submitApplication(id: String, kind: String, callbackUrl: String): Future[Job] = {
     val url = f"$callbackUrl/sessions/$id/callback"
 
     val livyJar: String = livyConf.getOption("livy.yarn.jar")
@@ -51,7 +51,7 @@ class Client(livyConf: LivyConf) extends Logging {
       "--class", "com.cloudera.hue.livy.repl.Main",
       "--driver-java-options", f"-Dlivy.repl.callback-url=$url -Dlivy.repl.port=0",
       livyJar,
-      lang
+      kind
     )
 
     builder.redirectOutput(Redirect.PIPE)

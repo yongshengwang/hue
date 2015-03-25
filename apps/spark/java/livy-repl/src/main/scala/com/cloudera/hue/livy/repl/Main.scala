@@ -5,7 +5,7 @@ import javax.servlet.ServletContext
 
 import com.cloudera.hue.livy.repl.python.PythonSession
 import com.cloudera.hue.livy.repl.scala.SparkSession
-import com.cloudera.hue.livy.{Logging, WebServer}
+import com.cloudera.hue.livy.{Utils, Logging, WebServer}
 import dispatch._
 import org.json4s.jackson.Serialization.write
 import org.json4s.{DefaultFormats, Formats}
@@ -19,9 +19,7 @@ import _root_.scala.concurrent.{Await, ExecutionContext}
 object Main extends Logging {
 
   val SESSION_KIND = "livy.repl.session.kind"
-  val PYTHON_SESSION = "python"
   val PYSPARK_SESSION = "pyspark"
-  val SCALA_SESSION = "scala"
   val SPARK_SESSION = "spark"
 
   def main(args: Array[String]): Unit = {
@@ -40,10 +38,10 @@ object Main extends Logging {
       sys.exit(1)
     }
 
-    val session_kind = args(0)
+    val session_kind = args.head
 
     session_kind match {
-      case PYTHON_SESSION | PYSPARK_SESSION | SCALA_SESSION | SPARK_SESSION =>
+      case PYSPARK_SESSION | SPARK_SESSION =>
       case _ =>
         println("Unknown session kind: " + session_kind)
         sys.exit(1)
@@ -81,9 +79,7 @@ class ScalatraBootstrap extends LifeCycle with Logging {
 
   override def init(context: ServletContext): Unit = {
     session = context.getInitParameter(Main.SESSION_KIND) match {
-      case Main.PYTHON_SESSION => PythonSession.createPySpark()
       case Main.PYSPARK_SESSION => PythonSession.createPySpark()
-      case Main.SCALA_SESSION => SparkSession.create()
       case Main.SPARK_SESSION => SparkSession.create()
     }
 

@@ -6,5 +6,5 @@ import org.scalatest.{BeforeAndAfter, FunSpec}
 
 class ThreadSessionSpec extends BaseSessionSpec with FunSpec with ShouldMatchers with BeforeAndAfter {
 
-  def createSession() = ThreadSession.create("0", "spark")
+  def createSession() = ThreadSession.create("0", Session.Spark())
 }

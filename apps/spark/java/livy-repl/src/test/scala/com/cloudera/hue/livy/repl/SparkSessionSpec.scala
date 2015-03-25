@@ -1,5 +1,7 @@
 package com.cloudera.hue.livy.repl
 
+import java.util.concurrent.TimeUnit
+
 import com.cloudera.hue.livy.repl.scala.SparkSession
 import org.json4s.JsonAST.JValue
 import org.json4s.{DefaultFormats, Extraction}
@@ -29,7 +31,7 @@ class SparkSessionSpec extends FunSpec with ShouldMatchers with BeforeAndAfter {
     }
 
     it("should eventually become the idle state") {
-      session.waitForStateChange(Session.Starting())
+      session.waitForStateChange(Session.Starting(), Duration(10, TimeUnit.SECONDS))
       session.state should equal (Session.Idle())
     }
 

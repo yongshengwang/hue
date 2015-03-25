@@ -24,9 +24,8 @@ class WebAppSpec extends ScalatraSuite with FunSpec with BeforeAndAfter {
       Future.successful(rep)
     }
 
-    override def close(): Future[Unit] = {
+    override def close(): Unit = {
       _state = Session.ShuttingDown()
-      Future.successful(())
     }
 
     override def history(): Seq[JValue] = _history

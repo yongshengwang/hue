@@ -58,9 +58,8 @@ class WebApp(session: Session) extends ScalatraServlet with FutureSupport with J
   }
 
   delete("/") {
-    session.close().onComplete { _ =>
-      System.exit(0)
-    }
+    session.close()
+    System.exit(0)
   }
 
   error {

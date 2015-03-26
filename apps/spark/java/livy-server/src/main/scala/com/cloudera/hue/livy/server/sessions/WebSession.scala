@@ -39,6 +39,10 @@ class WebSession(val id: String, val kind: Kind) extends Session with Logging {
   }
 
   private def svc = {
+    Utils.waitUntil({ () =>
+      _url.isDefined
+    }, Duration(10, TimeUnit.SECONDS))
+
     val url = _url.head
     dispatch.url(url.toString)
   }

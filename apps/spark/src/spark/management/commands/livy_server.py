@@ -67,7 +67,7 @@ class Command(NoArgsCommand):
 
     livy_yarn_jar = spark.conf.LIVY_YARN_JAR.get()
     if livy_yarn_jar:
-      args.append("-Dlivy.yarn.jar=" + livy_yarn_jar)
+      args.append("-Dlivy.assembly.jar=" + livy_yarn_jar)
 
     args.append("com.cloudera.hue.livy.server.Main")
 

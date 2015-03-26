@@ -14,6 +14,8 @@ import scala.util.control.Breaks._
 
 object ProcessSession extends Logging {
 
+  val CONF_LIVY_JAR = "livy.assembly.jar"
+
   def create(conf: LivyConf, id: String, kind: Session.Kind): Session = {
     val process = startProcess(conf, id, kind)
     new ProcessSession(id, kind, process)
@@ -31,7 +33,12 @@ object ProcessSession extends Logging {
       args += javaOpts
     }
 
-    args += Utils.jarOfClass(getClass).head
+    conf.getOption("livy.repl.driverClassPath").foreach { case extraClassPath =>
+      args += "--driver-class-path"
+      args += extraClassPath
+    }
+
+    args += livyJar(conf)
     args += kind.toString
 
     val pb = new ProcessBuilder(args)
@@ -44,7 +51,12 @@ object ProcessSession extends Logging {
     pb.redirectError(Redirect.INHERIT)
 
     pb.start()
+  }
 
+  private def livyJar(conf: LivyConf): String = {
+    conf.getOption(CONF_LIVY_JAR).getOrElse {
+      Utils.jarOfClass(getClass).head
+    }
   }
 }
 

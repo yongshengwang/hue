@@ -14,7 +14,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 object Client extends Logging {
   private val LIVY_JAR = "__livy__.jar"
-  private val CONF_LIVY_JAR = "livy.yarn.jar"
+  private val CONF_LIVY_JAR = "livy.assembly.jar"
   private val LOCAL_SCHEME = "local"
   private lazy val regex = """Application report for (\w+)""".r.unanchored
 
@@ -42,15 +42,13 @@ class Client(livyConf: LivyConf) extends Logging {
   def submitApplication(id: String, kind: String, callbackUrl: String): Future[Job] = {
     val url = f"$callbackUrl/sessions/$id/callback"
 
-    val livyJar: String = livyConf.getOption("livy.yarn.jar")
-      .getOrElse(Utils.jarOfClass(classOf[Client]).head)
 
     val builder: ProcessBuilder = new ProcessBuilder(
       "spark-submit",
       "--master", "yarn-cluster",
       "--class", "com.cloudera.hue.livy.repl.Main",
       "--driver-java-options", f"-Dlivy.repl.callback-url=$url -Dlivy.repl.port=0",
-      livyJar,
+      livyJar(livyConf),
       kind
     )
 

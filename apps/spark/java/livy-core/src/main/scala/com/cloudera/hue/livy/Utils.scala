@@ -2,6 +2,7 @@ package com.cloudera.hue.livy
 
 import java.io.{FileInputStream, InputStreamReader, File}
 import java.util.Properties
+import java.util.concurrent.TimeUnit
 
 import scala.annotation.tailrec
 import scala.collection.JavaConversions._
@@ -64,14 +65,15 @@ object Utils {
    * to limit the poll calls.
    *
    * @param checkForEvent
-   * @param atMost
+   * @param atMost How long to wait for. Defaults to 5 minutes.
    * @throws java.util.concurrent.TimeoutException
    * @throws java.lang.InterruptedException
    * @return
    */
   @throws(classOf[TimeoutException])
   @throws(classOf[InterruptedException])
-  final def waitUntil(checkForEvent: () => Boolean, atMost: Duration) = {
+  final def waitUntil(checkForEvent: () => Boolean,
+                      atMost: Duration = Duration(5, TimeUnit.MINUTES)) = {
     val endTime = System.currentTimeMillis() + atMost.toMillis
 
     @tailrec

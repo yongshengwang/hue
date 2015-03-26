@@ -79,6 +79,14 @@ trait Session {
 
   def stop(): Future[Unit]
 
+  /**
+   * Wait until the state has changed from this state.
+   *
+   * @param oldState the state we are waiting to change from.
+   * @param atMost how long we want to wait for.
+   * @throws java.util.concurrent.TimeoutException
+   * @throws java.lang.InterruptedException
+   */
   @throws(classOf[TimeoutException])
   @throws(classOf[InterruptedException])
   final def waitForStateChange(oldState: State, atMost: Duration) = {
@@ -86,7 +94,6 @@ trait Session {
       val currentState = Await.result(state, atMost)
       currentState != oldState
     }, atMost)
-    val endTime = System.currentTimeMillis() + atMost.toMillis
   }
 }
 

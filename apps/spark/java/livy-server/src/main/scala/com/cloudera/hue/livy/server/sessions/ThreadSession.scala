@@ -36,15 +36,17 @@ private class ThreadSession(val id: String, val kind: Session.Kind, session: com
 
   override def lastActivity: Long = 0
 
-  override def state: State = {
-    session.state match {
-      case repl.Session.NotStarted() => NotStarted()
-      case repl.Session.Starting() => Starting()
-      case repl.Session.Idle() => Idle()
-      case repl.Session.Busy() => Busy()
-      case repl.Session.ShuttingDown() => Dead()
-      case repl.Session.ShutDown() => Dead()
-      case repl.Session.Error() => Error()
+  override def state: Future[State] = {
+    Future.successful {
+      session.state match {
+        case repl.Session.NotStarted() => NotStarted()
+        case repl.Session.Starting() => Starting()
+        case repl.Session.Idle() => Idle()
+        case repl.Session.Busy() => Busy()
+        case repl.Session.ShuttingDown() => Dead()
+        case repl.Session.ShutDown() => Dead()
+        case repl.Session.Error() => Error()
+      }
     }
   }
 

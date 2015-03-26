@@ -61,7 +61,7 @@ trait Session {
 
   def lastActivity: Long
 
-  def state: State
+  def state: Future[State]
 
   def url: Option[URL]
 
@@ -82,7 +82,10 @@ trait Session {
   @throws(classOf[TimeoutException])
   @throws(classOf[InterruptedException])
   final def waitForStateChange(oldState: State, atMost: Duration) = {
-    Utils.waitUntil({ () => state != oldState }, atMost)
+    Utils.waitUntil({ () =>
+      val currentState = Await.result(state, atMost)
+      currentState != oldState
+    }, atMost)
     val endTime = System.currentTimeMillis() + atMost.toMillis
   }
 }

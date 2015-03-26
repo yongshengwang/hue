@@ -29,12 +29,12 @@ abstract class BaseSessionSpec extends FunSpec with ShouldMatchers with BeforeAn
 
   describe("A spark session") {
     it("should start in the starting or idle state") {
-      session.state should (equal (Session.Starting()) or equal (Session.Idle()))
+      Await.result(session.state, Duration(10, TimeUnit.SECONDS)) should (equal (Session.Starting()) or equal (Session.Idle()))
     }
 
     it("should eventually become the idle state") {
-      session.waitForStateChange(Session.Starting(), Duration(300, TimeUnit.SECONDS))
-      session.state should equal (Session.Idle())
+      session.waitForStateChange(Session.Starting(), Duration(30, TimeUnit.SECONDS))
+      Await.result(session.state, Duration(10, TimeUnit.SECONDS)) should equal (Session.Idle())
     }
 
     it("should execute `1 + 2` == 3") {

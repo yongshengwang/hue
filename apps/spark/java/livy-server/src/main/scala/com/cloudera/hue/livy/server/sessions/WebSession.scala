@@ -45,7 +45,23 @@ class WebSession(val id: String, val kind: Kind) extends Session with Logging {
 
   override def lastActivity: Long = _lastActivity
 
-  override def state: State = _state
+  override def state: Future[State] = {
+    val req = svc.setContentType("application/json", "UTF-8")
+
+    Http(req OK as.json4s.Json).map { case (resp) =>
+        val respMap = resp.extract[Map[String, JValue]]
+        respMap("state").extract[String] match {
+          case "not_started" => Session.NotStarted()
+          case "starting" => Session.Starting()
+          case "idle" => Session.Idle()
+          case "busy" => Session.Busy()
+          case "error" => Session.Error()
+          case "shutting_down" => Session.Dead()
+          case "shutdown" => Session.Dead()
+          case state => throw new IllegalStateException(state)
+        }
+    }
+  }
 
   override def executeStatement(content: ExecuteRequest): Statement = {
     ensureIdle {

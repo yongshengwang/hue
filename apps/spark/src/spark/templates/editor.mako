@@ -641,11 +641,25 @@ ${ commonheader(_('Query'), app_name, user, "68px") | n,unicode }
       <!-- /ko -->
       <!-- ko if: type() == 'jar' -->
         <div class="snippet-body">
-          <input type="text" data-bind="value: properties.app_jar" placeholder="${ _('Name, e.g. mapred.map.tasks') }"/>
+          <input type="text" class="input-xlarge" data-bind="value: properties.app_jar" placeholder="${ _('Path to application jar, e.g. hdfs://localhost:8020/user/hue/oozie-examples.jar') }"/>
           </br>
-          <input type="text" data-bind="value: properties.class" placeholder="${ _('Name, e.g. mapred.map.tasks') }"/>
+          <input type="text" class="input-xlarge" data-bind="value: properties.class" placeholder="${ _('Class name of application, e.g. org.apache.oozie.example.SparkFileCopy') }"/>
           </br>
-          <input type="text" data-bind="value: properties.parameters" placeholder="${ _('Name, e.g. mapred.map.tasks') }"/>
+          <ul data-bind="foreach: properties.arguments" class="unstyled">
+            <li>
+              <input type="text" data-bind="value: $data" placeholder="${ _('e.g. 1000, market') }"/>
+              <a href="#" data-bind="click: function(){ $parent.arguments.remove(this); }">
+                <i class="fa fa-minus"></i>
+              </a>
+            </li>
+          </ul>
+          <a class="pointer" data-bind="click: function(){ $data.properties.arguments.push(''); }">
+            <i class="fa fa-plus"></i> ${ _('Add argument') }
+          </a>
+          </br>
+          <a title="${ _('Submit') }" data-bind="click: execute, visible: status() != 'running'" class="btn btn-primary disable-feedback pointer">
+            <i class="fa fa-play"></i>
+          </a>
         </div>
       <!-- /ko -->      
     </div>

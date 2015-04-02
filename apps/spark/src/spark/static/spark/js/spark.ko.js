@@ -570,7 +570,7 @@ var Notebook = function (vm, notebook) {
       properties['arguments'] = [];
     }
 
-    var _snippet = new Snippet(vm, self, {type: self.selectedSnippet(), properties: {}, result: {}});
+    var _snippet = new Snippet(vm, self, {type: self.selectedSnippet(), properties: properties, result: {}});
     self.snippets.push(_snippet);
 
     if (self.getSession(self.selectedSnippet()) == null) {

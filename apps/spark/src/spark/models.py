@@ -81,12 +81,10 @@ class Notebook():
 
 
 def get_api(user, snippet):
-  if snippet['type'] in ('hive', 'impala', 'spark-sql'):
+  if snippet['type'] in ('hive', 'impala', 'spark-sql', 'jar'):
     return HS2Api(user)
   elif snippet['type'] == 'text':
     return TextApi(user)
-  elif snippet['type'] == 'jar':
-    return JarApi(user)
   else:
     return SparkApi(user)
 
@@ -105,19 +103,6 @@ class TextApi():
         'type': lang,
         'id': None
     }
-
-
-class JarApi():
-
-  def __init__(self, user):
-    self.user = user
-
-  def create_session(self, lang):
-    return {
-        'type': lang,
-        'id': None
-    }
-
 
 
 # HS2
@@ -309,7 +294,7 @@ class SparkApi():
     session = _get_snippet_session(notebook, snippet)
 
     try:
-      response = api.submit_statement(session['id'], snippet['statement'])
+      response = api.submit_statement(session['id'], snippet['statement']) ## --> post all props in json
       return {
           'id': response['id'],
           'has_result_set': True,

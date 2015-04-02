@@ -301,6 +301,10 @@ ${ commonheader(_('Query'), app_name, user, "68px") | n,unicode }
   <img src="${ static('beeswax/art/icon_beeswax_48.png') }" class="snippet-icon">
   <!-- /ko -->
 
+  <!-- ko if: type() == 'jar' -->
+  <i class="fa fa-file-archive-o" class="snippet-icon"></i>
+  <!-- /ko -->
+
   <!-- ko if: type() == 'impala' -->
   <img src="${ static('impala/art/icon_impala_48.png') }" class="snippet-icon">
   <!-- /ko -->
@@ -356,7 +360,7 @@ ${ commonheader(_('Query'), app_name, user, "68px") | n,unicode }
           <a href="javascript:void(0)" data-bind="visible: $root.isEditing, click: function(){ remove($parent, $data); window.setTimeout(redrawFixedHeaders, 100);}"><i class="fa fa-times"></i></a>
         </div>
       </h2>
-      <!-- ko if: type() != 'text' -->
+      <!-- ko if: ['text', 'jar'].indexOf(type()) == -1  -->
       <div class="snippet-body">
         <div class="row-fluid">
           <div data-bind="css: editorKlass">
@@ -635,6 +639,15 @@ ${ commonheader(_('Query'), app_name, user, "68px") | n,unicode }
           <div data-bind="attr:{'id': 'editor_'+id()}, html: statement_raw, value: statement_raw, medium: {}" class="text-snippet"></div>
         </div>
       <!-- /ko -->
+      <!-- ko if: type() == 'jar' -->
+        <div class="snippet-body">
+          <input type="text" data-bind="value: properties.app_jar" placeholder="${ _('Name, e.g. mapred.map.tasks') }"/>
+          </br>
+          <input type="text" data-bind="value: properties.class" placeholder="${ _('Name, e.g. mapred.map.tasks') }"/>
+          </br>
+          <input type="text" data-bind="value: properties.parameters" placeholder="${ _('Name, e.g. mapred.map.tasks') }"/>
+        </div>
+      <!-- /ko -->      
     </div>
   </div>
 </script>

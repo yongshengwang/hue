@@ -535,14 +535,18 @@ var Collection = function (vm, collection) {
   self.newQDefinitionName = ko.observable("");
 
   self.addQDefinition = function () {
-    self.qdefinitions.push(
-        ko.mapping.fromJS({
-          'name': self.newQDefinitionName(),
-          'id': UUID(),
-          'data': ko.mapping.toJSON(vm.query)
-        })
-    );
-    self.newQDefinitionName("");
+    if ($.trim(self.newQDefinitionName()) != "") {
+      var _def = ko.mapping.fromJS({
+        'name': $.trim(self.newQDefinitionName()),
+        'initialName': $.trim(self.newQDefinitionName()),
+        'id': UUID(),
+        'data': ko.mapping.toJSON(vm.query)
+      });
+      self.qdefinitions.push(_def);
+      self.loadQDefinition(_def);
+      self.newQDefinitionName("");
+      vm.save(true);
+    }
   };
 
   self.removeQDefinition = function (qdef) {
@@ -552,19 +556,66 @@ var Collection = function (vm, collection) {
         return false;
       }
     });
+    vm.save(true);
   }
 
   self.loadQDefinition = function (qdefinition) {
     var qdef = ko.mapping.fromJSON(qdefinition.data());
-
     vm.query.uuid(qdef.uuid());
     vm.query.qs(qdef.qs());
     vm.query.fqs(qdef.fqs());
     vm.query.start(qdef.start());
     vm.query.selectedMultiq(qdef.selectedMultiq());
 
-    vm.additionalInfo("<div class='center'><strong>" + qdefinition.name() + "</strong></div>");
+    qdefinition.hasChanged = ko.observable(false);
+    qdefinition.name.subscribe(function () {
+      vm.selectedQDefinition().hasChanged(true);
+    });
+    vm.selectedQDefinition(qdefinition);
     vm.search();
+    location.hash = "q=" + qdefinition.id();
+    $(document).trigger("loadedQDefinition");
+  }
+
+  self.reloadQDefinition = function () {
+    self.loadQDefinition(vm.selectedQDefinition());
+    vm.selectedQDefinition().name(vm.selectedQDefinition().initialName());
+    vm.selectedQDefinition().hasChanged(false);
+  }
+
+  self.updateQDefinition = function () {
+    $.each(self.qdefinitions(), function (index, qdefinition) {
+      if (qdefinition.id() == vm.selectedQDefinition().id()) {
+        qdefinition.data(ko.mapping.toJSON(vm.query));
+        qdefinition.initialName(qdefinition.name());
+      }
+    });
+    vm.save(true);
+    vm.selectedQDefinition().hasChanged(false);
+  }
+
+  self.unloadQDefinition = function () {
+    vm.selectedQDefinition(null);
+    vm.query.uuid(null);
+    vm.query.qs([
+      {
+        q: ""
+      }
+    ]);
+    vm.query.fqs([]);
+    vm.query.start(0);
+    vm.query.selectedMultiq([]);
+    location.hash = "";
+  }
+
+  self.getQDefinition = function (defID) {
+    var _qdef = null;
+    $.each(self.qdefinitions(), function (index, qdefinition) {
+      if (qdefinition.id() == defID) {
+        _qdef = qdefinition;
+      }
+    });
+    return _qdef;
   }
  
   self.addFacet = function (facet_json) {
@@ -1050,7 +1101,8 @@ var SearchViewModel = function (collection_json, query_json, initial_json) {
   self.initial = new NewTemplate(self, initial_json);
 
   // UI
-  self.additionalInfo = ko.observable("");
+  self.selectedQDefinition = ko.observable();
+  self.initialQueryJSON = query_json;
   self.response = ko.observable({});
   self.results = ko.observableArray([]);
   self.resultsHash = '';
@@ -1188,6 +1240,17 @@ var SearchViewModel = function (collection_json, query_json, initial_json) {
     $(".jHueNotify").hide();
     logGA('search');
     self.isRetrievingResults(true);
+
+    if (self.selectedQDefinition() != null) {
+      var _prop = ko.mapping.fromJSON(self.selectedQDefinition().data());
+      if (ko.toJSON(_prop.uuid()) != ko.toJSON(self.query.uuid())
+          || ko.toJSON(_prop.qs()) != ko.mapping.toJSON(self.query.qs())
+          || ko.toJSON(_prop.fqs()) != ko.mapping.toJSON(self.query.fqs())
+          || ko.toJSON(_prop.start()) != ko.mapping.toJSON(self.query.start())
+          || ko.toJSON(_prop.selectedMultiq()) != ko.mapping.toJSON(self.query.selectedMultiq())) {
+        self.selectedQDefinition().hasChanged(true);
+      }
+    }
 
     // Multi queries
     var multiQs = [];
@@ -1436,14 +1499,16 @@ var SearchViewModel = function (collection_json, query_json, initial_json) {
     return _analyse;
   }
 
-  self.save = function () {
+  self.save = function (noInfoMessage) {
     $.post("/search/save", {
       collection: ko.mapping.toJSON(self.collection),
       layout: ko.mapping.toJSON(self.columns)
     }, function (data) {
       if (data.status == 0) {
         self.collection.id(data.id);
-        $(document).trigger("info", data.message);
+        if (typeof noInfoMessage != "boolean" || noInfoMessage == false){
+          $(document).trigger("info", data.message);
+        }
         if (window.location.search.indexOf("collection") == -1) {
           window.location.hash = '#collection=' + data.id;
         }

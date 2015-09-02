@@ -242,9 +242,9 @@ body {
 }
 
 .tab-content {
-  background-color: #FFFFFF;
-  border-left: 1px solid #dddddd;
-  border-right: 1px solid #dddddd;
+  background-color: #f1f1f1;
+  /*border-left: 1px solid #dddddd;*/
+  /*border-right: 1px solid #dddddd;*/
 }
 
 .snippet-icon {
@@ -260,7 +260,7 @@ body {
 }
 
 .ui-sortable {
-  background-color: #FFF;
+  /*background-color: #FFF;*/
   min-height: 0px;
 }
 
@@ -549,4 +549,8 @@ table.airy tr td {
   animation-duration: 1s;
   -webkit-animation-fill-mode: both;
   animation-fill-mode: both;
+}
+
+.snippet-container {
+  /*margin-bottom: 10px;*/
 }

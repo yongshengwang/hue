@@ -311,7 +311,7 @@ from desktop.views import _ko
   <div class="snippet-container reveals-actions row-fluid">
     <div data-bind="css: klass, attr: {'id': 'snippet_' + id()}">
 
-      <h2 class="card-heading simple">
+      <h2 class="card-heading simple" data-bind="visible: $root.isEditing() || (type() != 'text' && !$root.isEditing())">
 
         <div class="dropdown inline widget-type" data-bind="visible: type() != 'text' || $root.isEditing()">
           <a class="dropdown-toggle no-underline" data-toggle="dropdown" href="javascript:void(0)">

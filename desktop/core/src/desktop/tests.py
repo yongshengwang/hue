@@ -785,13 +785,13 @@ class TestDatabasePasswordConfig(BaseTestPasswordConfig):
 class TestLDAPPasswordConfig(BaseTestPasswordConfig):
 
   def get_config_password(self):
-    return desktop.conf.LDAP_PASSWORD
+    return desktop.conf.AUTH_PASSWORD
 
   def get_config_password_script(self):
-    return desktop.conf.LDAP_PASSWORD_SCRIPT
+    return desktop.conf.AUTH_PASSWORD_SCRIPT
 
   def get_password(self):
-    return desktop.conf.get_ldap_password()
+    return desktop.conf.get_auth_password()
 
 
 class TestLDAPBindPasswordConfig(BaseTestPasswordConfig):

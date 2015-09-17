@@ -1,0 +1,10 @@
+[16/Sep/2015 07:13:12 ] settings     INFO     Welcome to Hue 3.9.0
+[16/Sep/2015 07:13:12 ] appmanager   DEBUG    Loaded Desktop Libraries: hadoop, liboauth, liboozie, libopenid, librdbms, libsaml, libsentry, libsolr, libzookeeper
+[16/Sep/2015 07:13:12 ] appmanager   DEBUG    Loaded Desktop Applications: indexer
+[16/Sep/2015 07:13:12 ] settings     DEBUG    Installed Django modules: DesktopModule(hadoop: hadoop),DesktopModule(liboauth: liboauth),DesktopModule(liboozie: liboozie),DesktopModule(libopenid: libopenid),DesktopModule(librdbms: librdbms),DesktopModule(libsaml: libsaml),DesktopModule(libsentry: libsentry),DesktopModule(libsolr: libsolr),DesktopModule(libzookeeper: libzookeeper),DesktopModule(Hue: desktop),DesktopModule(Solr Indexer: indexer)
+[16/Sep/2015 07:13:12 ] settings     DEBUG    DESKTOP_DB_TEST_NAME SET: /home/tiny/hue/desktop/desktop-test.db
+[16/Sep/2015 07:20:00 ] settings     INFO     Welcome to Hue 3.9.0
+[16/Sep/2015 07:20:00 ] appmanager   DEBUG    Loaded Desktop Libraries: hadoop, liboauth, liboozie, libopenid, librdbms, libsaml, libsentry, libsolr, libzookeeper
+[16/Sep/2015 07:20:00 ] appmanager   DEBUG    Loaded Desktop Applications: indexer
+[16/Sep/2015 07:20:00 ] settings     DEBUG    Installed Django modules: DesktopModule(hadoop: hadoop),DesktopModule(liboauth: liboauth),DesktopModule(liboozie: liboozie),DesktopModule(libopenid: libopenid),DesktopModule(librdbms: librdbms),DesktopModule(libsaml: libsaml),DesktopModule(libsentry: libsentry),DesktopModule(libsolr: libsolr),DesktopModule(libzookeeper: libzookeeper),DesktopModule(Hue: desktop),DesktopModule(Solr Indexer: indexer)
+[16/Sep/2015 07:20:00 ] settings     DEBUG    DESKTOP_DB_TEST_NAME SET: /home/tiny/hue/desktop/desktop-test.db

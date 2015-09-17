@@ -1,0 +1,4 @@
+#!/home/tiny/hue/build/env/bin/python2.7
+# EASY-INSTALL-SCRIPT: 'logilab-common==1.0.2','pytest'
+__requires__ = 'logilab-common==1.0.2'
+__import__('pkg_resources').run_script('logilab-common==1.0.2', 'pytest')

@@ -1,0 +1,4 @@
+#!/home/tiny/hue/build/env/bin/python2.7
+# EASY-INSTALL-SCRIPT: 'boto==2.38.0','sdbadmin'
+__requires__ = 'boto==2.38.0'
+__import__('pkg_resources').run_script('boto==2.38.0', 'sdbadmin')
